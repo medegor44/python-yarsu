@@ -14,6 +14,6 @@ class Solution:
                     continue
                 case _:
                     stack.append(x)
-        return f"/{str.join('/', stack)}" 
+        return f"/{'/'.join(stack)}" 
     
 print(Solution().simplifyPath("/.../a/../b/c/../d/./"))
