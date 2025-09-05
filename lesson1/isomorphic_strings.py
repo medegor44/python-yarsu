@@ -12,7 +12,10 @@ class Solution:
                 reverseMapping[t[i]] = s[i]
                 continue
 
-            if (s[i] in charsMapping and charsMapping[s[i]] != t[i]) or (t[i] in reverseMapping and reverseMapping[t[i]] != s[i]):
+            if (
+                (s[i] in charsMapping and charsMapping[s[i]] != t[i]) or 
+                (t[i] in reverseMapping and reverseMapping[t[i]] != s[i])
+            ):
                 return False
         
         return True
