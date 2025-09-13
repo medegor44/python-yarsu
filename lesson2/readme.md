@@ -84,20 +84,20 @@ service.add_bike(Bike("id2"))
 print("Доступно сначала:", service.list_available())
 
 # Аренда электрического на 3 часа
-rental_id = service.start_rental("e1", hours=3)
-print("Стоимость аренды e1 (3ч):", service.get_rental_cost(rental_id))  # 3*150 + 50 = 500
+rental_id = service.start_rental("id1", hours=3)
+print("Стоимость аренды id1 (3ч):", service.get_rental_cost(rental_id))  # 3*150 + 50 = 500
 
 # Попытка взять его снова
 try:
-    service.start_rental("e1", 1)
+    service.start_rental("id1", 1)
 except BikeAlreadyRentedError:
-    print("Ожидаемо: e1 уже в аренде")
+    print("Ожидаемо: id1 уже в аренде")
 
 # Завершение аренды
 service.finish_rental(rental_id)
 
 # Повторная аренда теперь возможна
-service.start_rental("e1", 1)
+service.start_rental("id1", 1)
 
 print("Доступно после операций:", service.list_available())
 ```
