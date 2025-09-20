@@ -6,6 +6,12 @@ import os
 
 load_dotenv()
 
+MAIN_PROMPT = """
+Ты крутой решатель задач по программированию. Я тебе отправляю задачу, а ты в ответ должен мне прислать код ее решения и
+ничего больше. Вот условие задачи:
+
+"""
+
 async def get_authorization_token(session: ClientSession):
     url = 'https://ngw.devices.sberbank.ru:9443/api/v2/oauth'
     token = os.getenv('GIGACHAT_AUTHORIZATION_KEY') 
@@ -42,7 +48,7 @@ async def ask_llm(session: ClientSession, token: str, prompt: str) -> str | None
         "messages": [
             {
                 "role": "user",
-                "content": prompt
+                "content": MAIN_PROMPT + prompt
             }
         ],
         "stream": False,
