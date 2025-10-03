@@ -3,8 +3,11 @@ from telegram import Update, InlineQueryResultArticle, InputTextMessageContent
 from telegram.ext import filters, MessageHandler, ApplicationBuilder, CommandHandler, ContextTypes, InlineQueryHandler
 from dotenv import load_dotenv
 from uuid import uuid4
-import os
 import logging
+
+from handlers.weather_handler import WeatherHandler
+from services.weather_service import WeatherService
+from utils.env_variable_provider import EnvVariableProvider
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -54,17 +57,25 @@ async def caps(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         text_caps = ' '.join(context.args).upper()
         await update.message.reply_text(text_caps)
 
-token = os.getenv("TELEGRAM_TOKEN")
-if token is None:
-    raise ValueError("TELEGRAM_TOKEN environment variable is not set")
+def main():
+    provider = EnvVariableProvider()
+    telegram_token = provider.get_telegram_token()
+    if telegram_token is None:
+        raise ValueError("TELEGRAM_TOKEN environment variable is not set")
+    
+    weather_service = WeatherService(provider)
+    weather_handler = WeatherHandler(weather_service)
 
-app = ApplicationBuilder().token(token).build()
+    app = ApplicationBuilder().token(telegram_token).build()
 
-app.add_handler(InlineQueryHandler(inline_caps))
-app.add_handler(CommandHandler("hello", hello))
-app.add_handler(CommandHandler("weather", get_weather))
-app.add_handler(CommandHandler("start", start))
-app.add_handler(CommandHandler("caps", caps))
-app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
+    app.add_handler(InlineQueryHandler(inline_caps))
+    app.add_handler(CommandHandler("hello", hello))
+    app.add_handler(CommandHandler("weather", weather_handler.get_weather))
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("caps", caps))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
 
-app.run_polling()
+    app.run_polling()
+
+if __name__ == "__main__":
+    main()
