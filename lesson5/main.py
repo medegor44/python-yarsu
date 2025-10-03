@@ -1,4 +1,3 @@
-from warnings import filters
 from telegram import Update, InlineQueryResultArticle, InputTextMessageContent
 from telegram.ext import filters, MessageHandler, ApplicationBuilder, CommandHandler, ContextTypes, InlineQueryHandler
 from dotenv import load_dotenv
