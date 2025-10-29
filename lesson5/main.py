@@ -1,6 +1,6 @@
-import psycopg
+import mssql_python
 
-with psycopg.connect('dbname=todo user=postgres password=1 host=localhost port=5432') as conn:
+with mssql_python.connect('SERVER=localhost;PORT=1433;DATABASE=todo;UID=sa;PWD=1234qwE?;TrustServerCertificate=yes') as conn:
     with conn.cursor() as cur:
         for t in cur.execute("SELECT * FROM items").fetchall():
             print(t)
